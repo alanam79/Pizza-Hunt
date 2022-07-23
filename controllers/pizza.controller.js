@@ -29,6 +29,7 @@ const pizzaController = {
   },
 
   // createPizza - POST /api/pizzas
+  // we are destructuring the body out of the express.js req object here
   createPizza({ body }, res) {
     Pizza.create(body)
       .then((dbPizzaData) => res.json(dbPizzaData))
@@ -60,7 +61,7 @@ const pizzaController = {
         res.json(dbPizzaData);
       })
       .catch((err) => res.status(400).json(err));
-  },
+  }
 };
 
 module.exports = pizzaController;
