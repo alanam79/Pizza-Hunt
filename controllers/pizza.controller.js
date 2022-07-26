@@ -4,6 +4,16 @@ const pizzaController = {
   // get all pizzas - GET /api/pizza
   getAllPizza(req, res) {
     Pizza.find({})
+      // populate the comments
+      .populate({
+        path: "comments",
+        // need the - in front of the __v field or it will only return the __v field (version field)
+        select: "-__v",
+      })
+      // below select will remove the pizza __v field to remove the noise from the code
+      .select("-__v")
+      // this is mongo's sort method in DESC order, this gets the newest pizza because the time stamp value is hidden inside the ObjectID
+      .sort({ _id: -1 })
       .then((dbPizzaData) => res.json(dbPizzaData))
       .catch((err) => {
         console.log(err);
@@ -14,6 +24,15 @@ const pizzaController = {
   // get one pizza by id - GET /api/pizza/id
   getPizzaById({ params }, res) {
     Pizza.findOne({ _id: params.id })
+      // populate the comment
+      .populate({
+        path: "comments",
+        // need the - in front of the __v field or it will only return the __v field (version field)
+        select: "-__v",
+        //  the .sort() method here because we'd only be sorting a single pizza
+      })
+      // below select will remove the pizza __v field to remove the noise from the code
+      .select("-__v")
       .then((dbPizzaData) => {
         // If no pizza is found, send 404
         if (!dbPizzaData) {
@@ -39,6 +58,7 @@ const pizzaController = {
   // update pizza by id - PUT /api/pizzas/:id
   updatePizza({ params, body }, res) {
     // By setting the parameter to true, we're instructing Mongoose to return the new version of the document
+    // the "where" clause is used first - _id, then the updated data - body, then options for how the data should be returned.
     Pizza.findOneAndUpdate({ _id: params.id }, body, { new: true })
       .then((dbPizzaData) => {
         if (!dbPizzaData) {
@@ -61,7 +81,7 @@ const pizzaController = {
         res.json(dbPizzaData);
       })
       .catch((err) => res.status(400).json(err));
-  }
+  },
 };
 
 module.exports = pizzaController;
