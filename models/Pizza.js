@@ -1,5 +1,7 @@
 // Only need to import the functions you want, not the full library
 const { Schema, model } = require("mongoose");
+// importing function from utils folder for the timestamp
+const dateFormat = require("../utils/dateFormat");
 
 const PizzaSchema = new Schema(
   {
@@ -13,6 +15,8 @@ const PizzaSchema = new Schema(
       type: Date,
       //   if no value is provided, this function will execute and provide a timestamp
       default: Date.now,
+      // a getter, this takes stored data and modifies/formats upon return, in this case using the dateFormat() function
+      get: (createdAtVal) => dateFormat(createdAtVal),
     },
     size: {
       type: String,
@@ -33,9 +37,10 @@ const PizzaSchema = new Schema(
     ],
   },
   {
-    // tell the schema it will use virtuals
+    // tell the schema it will use virtuals and getters
     toJSON: {
       virtuals: true,
+      getters: true,
     },
     // set id to false because this is a virtual that Mongoose returns (and its not needed here)
     id: false,
