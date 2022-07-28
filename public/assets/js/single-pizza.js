@@ -131,24 +131,24 @@ function handleNewCommentSubmit(event) {
 
   // added POST functionality for creating a new comment
   fetch(`/api/comments/${pizzaId}`, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json'
+      Accept: "application/json",
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify(formData)
+    body: JSON.stringify(formData),
   })
-    .then(response => {
+    .then((response) => {
       if (!response.ok) {
-        throw new Error('Something went wrong!');
+        throw new Error("Something went wrong!");
       }
       response.json();
     })
-    .then(commentResponse => {
+    .then((commentResponse) => {
       console.log(commentResponse);
       location.reload();
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
     });
 }
@@ -170,6 +170,29 @@ function handleNewReplySubmit(event) {
   }
 
   const formData = { writtenBy, replyBody };
+
+  // added PUT request functionality
+  fetch(`/api/comments/${pizzaId}/${commentId}`, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(formData),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Something went wrong!");
+      }
+      response.json();
+    })
+    .then((commentResponse) => {
+      console.log(commentResponse);
+      location.reload();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 }
 
 $backBtn.addEventListener("click", function () {
