@@ -30,8 +30,6 @@ const ReplySchema = new Schema(
       // tell the schema it will use getters
       getters: true,
     },
-    // set id to false because this is a virtual that Mongoose returns (and its not needed here)
-    id: false,
   }
 );
 
