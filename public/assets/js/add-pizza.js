@@ -62,8 +62,10 @@ const handlePizzaSubmit = (event) => {
       alert("Pizza created successfully!");
       console.log(postResponse);
     })
+    // the saveRecord is called if there is no internet connection
     .catch((err) => {
       console.log(err);
+      saveRecord(formData);
     });
 };
 
